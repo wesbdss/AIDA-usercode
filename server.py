@@ -82,9 +82,7 @@ class Server:
         # Implementar requests Json
         #
 
-
         
-
 
         #
         # Carregar labels e tabela de palavras
