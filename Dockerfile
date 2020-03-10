@@ -13,7 +13,7 @@ ADD libs libs/
 ADD arquivos arquivos/
 ADD requerimentsGen.txt .
 
-RUN pip3 install --upgrade pip
+RUN pip3 install --upgrade pip3
 RUN pip3 install -r requerimentsGen.txt
 
 ADD server.py .
