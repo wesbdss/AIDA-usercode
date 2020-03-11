@@ -34,9 +34,9 @@ with open("arquivos/intents.json") as file:
 
 class Server:
     def __init__(self):
-        self.pcss = Process()
+        self.pcss = Process(load=True)
         self.ppcss = Preprocess()
-        self.words,self.labels,_,_ = self.pcss.carregarDado(dir='arquivos/data.pickle')
+
     async def pass1(self,websocket,path):
         print(path)
         print(websocket)
@@ -46,45 +46,48 @@ class Server:
             await websocket.send('Blz mlk')
     
     async def chat(self,sock,path):
+        while True:
+            words,labels,_,_ = self.pcss.carregarDado(dir='arquivos/data.pickle')
 
-        #
-        # Get dados do usuário
-        #
-
-        #
-        # Importar processos
-        #
-
-        entrada =  await sock.recv()
-        print(sock," > ",entrada)
-        if entrada == 'quit': #fecha o servidor
-            exit()
-
-        #
-        # Implementar requests Json
-        #
-
-        
-
-        #
-        # Carregar labels e tabela de palavras
-        #
-
-        results, results_index = self.pcss.predict(self.ppcss.preprocess(entrada,self.words))
-        tag = self.labels[results_index]
-
-        if results[results_index]> 0.6:
-            for tg in data["intents"]:
-                if tg['tag'] == tag:
-                    responses = tg['responses']
-            await sock.send(random.choice(responses))
-        else: 
-            print("Eu não entendi o que vc falou")
             #
-            # Implementar o sistema de reaproveitamento de frases CSV
+            # Get dados do usuário
             #
-        print(random.choice(responses))
-        print(results)
+
+            #
+            # Importar processos
+            #
+
+            entrada =  await sock.recv()
+            print(sock," > ",entrada)
+            if entrada == 'quit': #fecha o servidor
+                exit()
+
+            #
+            # Implementar requests Json
+            #
+
+            
+
+            #
+            # Carregar labels e tabela de palavras
+            #
+
+            results, results_index = self.pcss.predict(self.ppcss.preprocess(entrada,words))
+            tag = labels[results_index]
+            responses = []
+            if results[results_index]> 0.6:
+                for tg in data["intents"]:
+                    if tg['tag'] == tag:
+                        responses = tg['responses']
+                await sock.send(random.choice(responses))
+                print(random.choice(responses))
+            else: 
+                print("Eu não entendi o que vc falou")
+                await sock.send("Não entendi o que vc falou!")
+                #
+                # Implementar o sistema de reaproveitamento de frases CSV
+                #
+            print(results)
 
     def main(self):
         print("Servidor rodando 0.0.0.0:10101")
