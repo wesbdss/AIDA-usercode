@@ -36,14 +36,6 @@ class Server:
     def __init__(self):
         self.pcss = Process(load=True)
         self.ppcss = Preprocess()
-
-    async def pass1(self,websocket,path):
-        print(path)
-        print(websocket)
-        while 1:
-            tes = await websocket.recv()
-            print(tes)
-            await websocket.send('Blz mlk')
     
     async def chat(self,sock,path):
         while True:
