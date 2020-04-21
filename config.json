@@ -1,3 +1,4 @@
 {
-    "type":"servidor"
+    "type":"servidor",
+    "userConf": "database/output/user.json"
 }
